@@ -1,0 +1,310 @@
+<script src="http://www.google.com/jsapi" type="text/javascript"></script> 
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+
+<html>
+<head>
+	<title>SRTGAN</title>
+	<meta property="og:image" content="Path to my teaser.png"/> <!-- Facebook automatically scrapes this. Go to https://developers.facebook.com/tools/debug/ if you update and want to force Facebook to rescrape. -->
+	<meta property="og:title" content="Creative and Descriptive Paper Title." />
+	<meta property="og:description" content="Paper description." />
+
+	<!-- Get from Google Analytics -->
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src=""></script> 
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-75863369-6');
+	</script>
+	<link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+	<br>
+	<center>
+		<span style="font-size:36px">SRTGAN: Triplet Loss based Generative Adversarial Network for Real-World Super-Resolution</span>
+		<table align=center width=1000px>
+			<table align=center width=1000px cellspacing="5px">
+                <br>
+				<tr>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px"><a href="https://dhruv2012.github.io/" target=”_blank”>Dhruv Patel<sup>1</sup>*</a></span>
+						</center>
+					</td>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px"><a href="" target=”_blank”>Abhinav Jain<sup>1</sup>*</a></span>
+						</center>
+					</td>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px" target=”_blank”><a href="">Simran Bawkar<sup>1</sup></a></span>
+						</center>
+					</td>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px" target=”_blank”><a href="https://www.linkedin.com/in/manav-khorasiya-74015717a/">Manav Khorasiya<sup>1</sup></a></span>
+						</center>
+					</td>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px" target=”_blank”><a href="">Kalpesh Prajapati<sup>1</sup></a></span>
+						</center>
+					</td>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px" target=”_blank”><a href="">Kishor Upla<sup>1</sup></a></span>
+						</center>
+					</td>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px" target=”_blank”><a href="">Kiran Raja<sup>2</sup></a></span>
+						</center>
+					</td>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px" target=”_blank”><a href="">Raghavendra Ramachandra<sup>2</sup></a></span>
+						</center>
+					</td>
+					<td align=center width=250px>
+						<center>
+							<span style="font-size:20px" target=”_blank”><a href="">Christoph Busch<sup>2</sup></a></span>
+						</center>
+					</td>
+				</tr>
+			</table>
+            <table align=center width="100%">
+                <br>
+                <tr>
+                    <td align=center width="100%">
+                        <center>
+                            <span style="font-size:12px">
+                                <b>*</b> denotes equal contribution <br>
+                                1 Sardar Vallabhbhai National Institute of Technology (SVNIT), Surat, India. <br>
+                                2 Norwegian University of Science and Technology (NTNU), Gjøvik, Norway.<br>
+                            </span>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+			<table align=center width=250px>
+				<tr>
+					<td align=center width=120px>
+						<center>
+							<span style="font-size:20px"><a href='https://arxiv.org/abs/2211.12180' target="_blank">[Paper]</a></span>
+						</center>
+					</td>
+					<td align=center width=120px>
+						<center>
+							<span style="font-size:20px"><a href='https://github.com/Dhruv2012/Image-SuperResolution/tree/cvip' target="_blank">[GitHub]</a></span><br>
+						</center>
+					</td>
+				</tr>
+			</table>
+			<br>
+            <table align=center width=800px>
+                <tr>
+                    <td width=260px>
+                        <center>
+                            <img class="round" style="width:700px" src="assets/images/intro.jpg"/>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+
+		</table>
+	</center>
+
+	<br>
+	<hr>
+
+	<table align=center width=850px>
+		<center><h1>Motivation</h1></center>
+		<tr>
+			<td>
+				<ul>
+					Real World applications (surveillance, forensics, etc.) require HR images, but these are not available in most situations
+					due to limitations of optical sensors and their cost, giving rise to the 
+					need for <b>Single Image Super-Resolution (SISR)</b>.
+
+					<br><br>
+					We tackle this problem by proposing a <b> Triplet loss-based GAN for
+					Real-world Super-Resolution (SRTGAN) </b>, which exploits
+					the information from LR image through triplet loss
+					formulation and improves the adversary and perceptual quality
+					of generated images.
+				
+					<br><br>
+
+					The below images show true LR and corresponding bicubic downsampled LR image from ground truth HR.
+					
+					<br>
+				
+					<div class="row">
+						<div class="column">
+							<center>
+								<figure align=center>
+									<img style="width:400px; padding-top: 25px;" src="assets/images/RealSR Dataset--bicubicInterpolation.drawio.png"/>
+									<figcaption align="center">Real SR Dataset</figcaption>
+								</figure>
+							</center>
+						</div>	
+						<div class="column">
+							<center>
+								<figure align=center>
+									<img style="width:450px;" src="assets/images/DIV2KRK Dataset-bicubicInterpolation.drawio.png"/>
+									<figcaption align="center">Div2KRK Dataset</figcaption>
+								</figure>
+							</center>
+						</div>
+					</div>ß
+				</center>
+			</td>
+		</tr>
+	</table>
+	<br>
+
+	<hr>
+	<table align=center width=850px>
+		<center><h1>Overview</h1></center>
+		<!-- <p align=center> To be updated</p> -->
+		<tr>
+			<td>
+				<ul>
+					<li>We propose a <b>Triplet loss-based patch GAN</b>, a generator
+						trained in a multi-loss setting and assisted by a patch-based
+						discriminator.
+					<li>We have implemented a <b>Triplet-based adversarial GAN loss</b>, which exploits the information
+						provided in the LR image (as a negative sample). This allows the
+						patch-based discriminator to better differentiate between HR
+						and LR images; hence, improving the adversary.</li>
+					<li>Training is performed on a fusion of <b> content (pixel-wise L1 loss), GAN
+						(triplet-based), Quality Assessment (QA), and
+						perceptual losses</b>, leading to superior quantitative and
+						subjective quality of SR results.</li>
+			</td>
+		</tr>
+	</table>
+	<br>
+
+	<hr>
+
+	<table align=center width=850px>
+		<center><h1>Modules</h1></center>
+		<tr>
+			<center>
+				<figure align=center>
+					<img style="width:500px" src="assets/images/Proposed framework.jpg"/>
+					<figcaption align="center">Proposed Framework
+					</figcaption>
+				</figure>
+			</center>
+			<td> <p>Our proposed framework consists of 2 major components:</p>
+				<ul>
+					<li> <b>Generator:</b> It is trained in a multi loss setting comprising of 3 different modules:
+						<ul>
+							<li><b>LLIE</b>: comprises a convolutional layer to extract low-level
+								edge and structural information.</li>
+							<li><b>HLIE</b>: comprises of 32 Residual-In-Residual (RIR) blocks and
+								a convolutional layer to extract high-level information.</li>
+							<li><b>SRRec</b>: omprises of an upsampling block and 2 conv layers
+								to reconstruct spatial dimensions same as input.</li>
+						</ul>
+					<br>
+					<li> <b>Discriminator:</b> A PatchGAN based discriminator network to distinguish foreground and background on patch with scale of 70x70 pixels.
+					<br>
+						<div class="row">
+							<div class="column">
+								<center>
+									<figure align=center>
+										<img style="width:450px" src="assets/images/generator network-Block.jpg"/>
+										<figcaption align="center">Generator Network</figcaption>
+									</figure>
+								</center>
+							</div>
+							<div class="column">
+								<center>
+									<figure align=center>
+										<img style="width:350px; padding-top: 80px;" src="assets/images/Discriminator Architecture.jpg"/>
+										<figcaption align="center">Discriminator Network</figcaption>
+									</figure>
+								</center>
+							</div>
+						</div>
+				</ul>
+			</td>
+		</tr>
+	</table>
+
+	<hr>
+	<table align=center width=850px>
+		<center><h1>Quantitative Analysis</h1></center>
+		<tr>
+			<td>
+				<ul>
+					<li>
+						Generally, for comparison of SR results obtained using the proposed method with other state-of-the-art methods, <b>PSNR</b> and <b>SSIM</b> values are estimated, which are the standard measurements for the SR problem.
+					</li>
+					<li>
+						However, these metrics do not entirely justify the quality based on human perception. Therefore, we estimate an additional metric, called <b>LPIPS</b> which is a deep network based full-reference perceptual quality assessment score. A low LPIPS value indicates better visual quality.
+					</li>
+					<center>
+						<figure align =center>
+						<img style="width:600px" src="assets/images/Quantitative Analysis.png"/>
+						<figcaption align="center"> The quantitative comparison of the proposed and other existing SR methods on RealSR validation and DIV2KRK datasets
+						</figcaption>
+					</figure>
+					</center>
+					
+				</ul>
+			
+			</td>
+		</tr>
+	</table>
+
+	<hr>
+	<table align=center width=850px>
+		<center><h1>Qualitative Analysis</h1></center>
+		<tr>
+			<td>
+				<ul>
+					<center>
+						<figure align =center>
+							<img style="width:800px" src="assets/images/Qualitative Analysis of SOTA on RealSR.png"/>
+							<figcaption align="center"> The comparison of the SR results obtained using the proposed and other state-of-the-art methods on RealSR validation dataset 
+							</figcaption>
+						</figure>
+					</center>
+					<br><br>
+					<center>
+						<figure align =center>
+							<img style="width:800px" src="assets/images/Qualitative Analysis of SOTA on DIV2KRK_1.png"/>
+							<figcaption align="center"> The comparison of the SR results obtained using the proposed and other state-of-the-art methods on DIV2KRK dataset
+							</figcaption>
+						</figure>
+					</center>
+					<br><br>
+					<center>
+						<figure align =center>
+							<img style="width:800px" src="assets/images/Qualitative Analysis of SOTA on DIV2KRK_4.png"/>
+							<figcaption align="center"> The comparison of the SR results obtained using the proposed and other state-of-the-art methods on DIV2KRK dataset
+							</figcaption>
+						</figure>
+					</center>					
+				</ul>
+			
+			</td>
+		</tr>
+	</table>
+
+	<br>
+
+<hr>
+<center> <h1> Contact </h1>
+	<p>If you have any questions, please reach out to any of the above mentioned authors.</p>
+	</center>
+</body>
+</html>
